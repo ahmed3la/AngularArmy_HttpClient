@@ -19,6 +19,12 @@ export class AppComponent {
       console.log('result', result);
     });
   }
+  doGet_Promise() {
+    this.apiService.doGet().toPromise().then((result) => {
+      console.log('result', result);
+    });
+  }
+
   doDelete() {
     this.apiService.doDelete().subscribe((result) => {
       console.log('result', result);

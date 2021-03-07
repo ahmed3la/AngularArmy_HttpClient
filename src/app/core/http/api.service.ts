@@ -1,6 +1,6 @@
 //import { environment as env } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { environment as env } from '@env/environment';
 
 
@@ -10,15 +10,20 @@ import { environment as env } from '@env/environment';
 })
 export class ApiService {
 
-  constructor(private http: HttpClient) { }
+  headers: HttpHeaders;
+
+  constructor(private http: HttpClient) {
+    const headers = { guest: 'true', language: 'en' }
+    this.headers = new HttpHeaders(headers);
+  }
 
   doGet() {
-    //console.log(env.apiRoot);
     return this.http.get(`${env.apiRoot}/get`, {
       params: { page: '20' },
-      headers: { guest: 'true' }
+      headers: this.headers
     });
   }
+
   doDelete() {
     return this.http.delete(`${env.apiRoot}/delete`, {
       params: { page: '20' },
