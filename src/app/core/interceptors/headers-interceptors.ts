@@ -6,9 +6,14 @@ import { Observable } from "rxjs";
 export class HeadersInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     //will add the logic hear
-    alert();
-    console.log("in interceptor", "Request", req, "next", next);
-    return next.handle(req);
+    const fackToken = 'nkjsnlkdmcdbvsFMNCNDBCHFHIEDJWQOPK';
+    const modifiedRequest = req.clone({
+      url: req.url.replace('http', 'https'),
+      headers: req.headers.set('Authorization', fackToken)
+    });
+
+    console.log("in interceptor", "Request", modifiedRequest, "next", next);
+    return next.handle(modifiedRequest);
   }
 
 }

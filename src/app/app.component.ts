@@ -1,5 +1,6 @@
 import { ApiService } from './core/http/api.service';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  isOffline: boolean;
+  @HostListener('window:offline', ['$event'])
+  isWindowOffile(event) {
+    console.log('offline ? ', event);
+    alert("You don't Internet");
+  }
+
   title = 'myHttpClient';
 
   constructor(private apiService: ApiService) {
@@ -15,9 +23,18 @@ export class AppComponent {
   }
 
   doGet() {
-    this.apiService.doGet().subscribe((result) => {
-      console.log('result', result);
+    this.apiService.doGet().subscribe((event: HttpEvent<any>) => {
+      //console.log('event is ', event);
+
+      switch (event.type) {
+        case HttpEventType.DownloadProgress:
+          console.log(`${Math.round(event.loaded / 1024)} loaded`);
+          break;
+      }
     });
+    // this.apiService.doGet().subscribe((result) => {
+    //   console.log('result', result);
+    // });
   }
   doGet_Promise() {
     this.apiService.doGet().toPromise().then((result) => {

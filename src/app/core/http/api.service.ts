@@ -1,7 +1,7 @@
 import { HandelErrorService } from './handel-error.service';
 //import { environment as env } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { environment as env } from '@env/environment';
 import { catchError } from 'rxjs/operators'
 
@@ -21,10 +21,14 @@ export class ApiService {
   }
 
   doGet() {
-    return this.http.get(`${env.apiRoot}/get`, {
-      params: { page: '20' },
-      headers: this.headers
+    const req = new HttpRequest('GET', `${env.apiRoot}/get`, {
+      reportProgress: true
     });
+    return this.http.request(req);
+    // return this.http.get(`${env.apiRoot}/get`, {
+    //   params: { page: '20' },
+    //   headers: this.headers
+    // });
   }
 
   doDelete() {
