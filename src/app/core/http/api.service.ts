@@ -1,8 +1,9 @@
+import { HandelErrorService } from './handel-error.service';
 //import { environment as env } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { environment as env } from '@env/environment';
-
+import { catchError } from 'rxjs/operators'
 
 
 @Injectable({
@@ -12,7 +13,9 @@ export class ApiService {
 
   headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private handelError: HandelErrorService) {
+
     const headers = { guest: 'true', language: 'en' }
     this.headers = new HttpHeaders(headers);
   }
@@ -31,12 +34,12 @@ export class ApiService {
     });
   }
   doPost() {
-    return this.http.post(`${env.apiRoot}/post`,
+    return this.http.post(`${env.apiRoot}/postXX`,
       { age: 20 },
       {
         params: { page: '20' },
         headers: { guest: 'true' }
-      });
+      }).pipe(catchError(this.handelError.logError));
   }
   doPut() {
     return this.http.put(`${env.apiRoot}/put`,
